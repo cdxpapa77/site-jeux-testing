@@ -3,127 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jeu Runner Simple</title>
+    <title>Site de Jeux - Créé par LOYD RAES</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
             text-align: center;
-            background-color: #87CEEB;
             margin: 0;
             padding: 0;
         }
-
-        #gameCanvas {
-            background: #FFF;
-            display: block;
-            margin: 0 auto;
-            border: 2px solid #000;
+        h1 {
+            color: #333;
         }
-
-        #score {
-            font-size: 24px;
+        a {
+            display: inline-block;
             margin: 20px;
+            padding: 15px 30px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        a:hover {
+            background-color: #0056b3;
+        }
+        footer {
+            margin-top: 50px;
+            font-size: 0.8em;
+            color: #666;
         }
     </style>
 </head>
 <body>
-    <h1>Jeu Runner Simple</h1>
-    <canvas id="gameCanvas" width="400" height="600"></canvas>
-    <p id="score">Score: 0</p>
-    <script>
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
 
-        const player = {
-            x: 50,
-            y: canvas.height - 50,
-            width: 30,
-            height: 30,
-            color: 'yellow',
-            jump: 0,
-            gravity: 0.5  
-        };
+    <h1>Bienvenue sur le Site de Jeux !</h1>
+    <p>Créé par LOYD RAES</p>
+    <a href="pierre_papier_ciseaux.html">Jouer à Pierre-Papier-Ciseaux</a>
+    <a href="jeu_de_memoire.html">Jouer au Jeu de Mémoire</a>
+    <a href="flappy_bird.html">Jouer à Flappy Bird Simplifié</a>
+    <a href="runner_game.html">Jouer au Jeu Runner</a> <!-- Lien vers le jeu Runner -->
 
-        const obstacles = [];
-        let score = 0;
-        let gameOver = false;
+    <footer>
+        <p>&copy; 2023 LOYD RAES. Tous droits réservés.</p>
+    </footer>
 
-        function addObstacle() {
-            const obstacleHeight = Math.random() * (canvas.height - 50) + 50;
-            obstacles.push({ x: canvas.width, y: canvas.height - obstacleHeight, width: 30, height: obstacleHeight });
-        }
-
-        function drawPlayer() {
-            ctx.fillStyle = player.color;
-            ctx.fillRect(player.x, player.y, player.width, player.height);
-        }
-
-        function drawObstacles() {
-            ctx.fillStyle = 'red';
-            obstacles.forEach(obstacle => {
-                ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
-            });
-        }
-
-        function updateObstacles() {
-            obstacles.forEach(obstacle => {
-                obstacle.x -= 2; 
-            });
-            if (obstacles.length && obstacles[0].x < 0) {
-                obstacles.shift();
-                score++;
-                document.getElementById('score').textContent = "Score: " + score;
-            }
-        }
-
-        function checkCollision() {
-            for (const obstacle of obstacles) {
-                if (player.x < obstacle.x + obstacle.width && player.x + player.width > obstacle.x &&
-                    player.y < obstacle.y + obstacle.height) {
-                    gameOver = true;
-                }
-            }
-        }
-
-        function jump() {
-            if (player.jump === 0) {
-                player.jump = 15; 
-            }
-        }
-
-        function update() {
-            if (gameOver) {
-                alert("Game Over! Votre score est: " + score);
-                document.location.reload();
-            }
-            ctx.clearRect(0, 0, canvas.width, canvas.height); 
-            if (player.jump > 0) {
-                player.y -= player.jump; 
-                player.jump -= player.gravity; 
-            }
-            if (player.y + player.height < canvas.height) {
-                player.y += player.gravity; 
-            }
-
-            drawPlayer();
-            drawObstacles();
-            updateObstacles();
-            checkCollision();
-        }
-
-        function gameLoop() {
-            update();
-            requestAnimationFrame(gameLoop);
-        }
-
-        document.addEventListener('keydown', function(event) {
-            if (event.code === "Space") { 
-                jump();
-            }
-        });
-
-        setInterval(addObstacle, 1500);
-        gameLoop();
-    </script>
 </body>
 </html>
