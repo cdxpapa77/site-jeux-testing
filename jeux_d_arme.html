@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeu de Tir</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .terrain {
+            position: relative;
+            width: 600px;
+            height: 400px;
+            background-color: #3CB371; /* Terrain vert */
+            margin: 20px auto; /* Centrer le terrain */
+            border: 2px solid #fff;
+            overflow: hidden;
+        }
+        .cible {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-color: red; /* Cible rouge */
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        #score {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Jeu de Tir</h1>
+    <p>Cliquez sur les cibles pour marquer des points !</p>
+    <div class="terrain" id="terrain"></div>
+    <div id="score">Score: 0</div>
+
+    <script>
+        let score = 0;
+        const scoreDisplay = document.getElementById('score');
+        const terrain = document.getElementById('terrain');
+
+        function createCible() {
+            const cible = document.createElement('div');
+            cible.className = 'cible';
+            cible.style.left = Math.random() * (terrain.clientWidth - 40) + 'px';
+            cible.style.top = Math.random() * (terrain.clientHeight - 40) + 'px';
+
+            cible.addEventListener('click', function() {
+                score++;
+                scoreDisplay.textContent = "Score: " + score;
+                terrain.removeChild(cible); // Enlève la cible touchée  
+                createCible(); // Crée une nouvelle cible  
+            });
+
+            terrain.appendChild(cible);
+        }
+
+        // Crée la première cible au démarrage  
+        createCible();
+    </script>
+
+</body>
+</html>
