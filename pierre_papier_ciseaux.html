@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pierre-Papier-Ciseaux</title>
+</head>
+<body>
+    <h1>Pierre-Papier-Ciseaux</h1>
+    <button onclick="play('pierre')">Pierre</button>
+    <button onclick="play('papier')">Papier</button>
+    <button onclick="play('ciseaux')">Ciseaux</button>
+    <p id="result"></p>
+
+    <script>
+        function play(userChoice) {
+            const choices = ['pierre', 'papier', 'ciseaux'];
+            const computerChoice = choices[Math.floor(Math.random() * choices.length)];
+            let result;
+
+            if (userChoice === computerChoice) {
+                result = "Égalité!";
+            } else if (
+                (userChoice === 'pierre' && computerChoice === 'ciseaux') ||
+                (userChoice === 'papier' && computerChoice === 'pierre') ||
+                (userChoice === 'ciseaux' && computerChoice === 'papier')
+            ) {
+                result = "Vous gagnez!";
+            } else {
+                result = "Vous perdez!";
+            }
+
+            document.getElementById('result').textContent = "Vous avez choisi: " + userChoice + ". L'ordinateur a choisi: " + computerChoice + ". " + result;
+        }
+    </script>
+</body>
+</html>

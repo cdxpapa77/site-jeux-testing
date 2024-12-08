@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeu de Mémoire</title>
+    <style>
+        .card {
+            width: 50px;
+            height: 50px;
+            display: inline-block;
+            background-color: grey;
+            margin: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Jeu de Mémoire</h1>
+    <div id="gameBoard"></div>
+    <p id="result"></p>
+
+    <script>
+        const cards = ['A', 'A', 'B', 'B', 'C', 'C', 'D', 'D'];
+        let firstCard = null;
+        let secondCard = null;
+        let lockBoard = false;
+        let matchedPairs = 0;
+
+        function shuffle(array) {
+            return array.sort(() => Math.random() - 0.5);
+        }
+
+        function createBoard() {
+            const shuffledCards = shuffle(cards);
+            const gameBoard = document.getElementById('gameBoard');
+            shuffledCards.forEach(card => {
+                const cardElement = document.createElement('div');
+                cardElement.classList.add('card');
+                cardElement.setAttribute('data-card', card);
+                cardElement.addEventListener('click', flipCard);
+                gameBoard.appendChild(cardElement);
+            });
+        }
+
+        function flipCard() {
+            if (lockBoard) return;
+            this.textContent = this.getAttribute('data-card');
+            if (!firstCard) {
+                firstCard = this;
+            } else {
+                secondCard = this;
+                lockBoard = true;
+                checkForMatch();
+            }
+        }
+
+        function checkForMatch() {
+            if (firstCard.textContent === secondCard.textContent) {
+                matchedPairs++;
+                if (matchedPairs === cards.length / 2) {
+                    document.getElementById('result').textContent = "Vous avez gagné!";
+                }
+                resetBoard();
+            } else {
+                setTimeout(() => {
+                    firstCard.textContent = '';
+                    secondCard.textContent = '';
+                    resetBoard();
+                }, 1000);
+            }
+        }
+
+        function resetBoard() {
+            [firstCard, secondCard, lockBoard] = [null, null, false];
+        }
+
+        createBoard();
+    </script>
+</body>
+</html>

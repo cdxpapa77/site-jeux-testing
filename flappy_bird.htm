@@ -1,0 +1,80 @@
+   let bird = { x: 50, y: 150, width: 20, height: 20, gravity: 0.5, lift: -10, velocity: 0 };
+    const pipes = [];
+    let frame = 0;
+
+    function drawBird() {
+        ctx.fillStyle = 'yellow';
+        ctx.fillRect(bird.x, bird.y, bird.width, bird.height);
+    }
+
+    function drawPipes() {
+        ctx.fillStyle = 'green';
+        pipes.forEach(pipe => {
+            ctx.fillRect(pipe.x, 0, pipe.width, pipe.bottom);
+            ctx.fillRect(pipe.x, pipe.top, pipe.width, canvas.height - pipe.top);
+        });
+    }
+
+    function updatePipes() {
+        if (frame % 90 === 0) {
+            const top = Math.random() * (canvas.height - 100);
+            const bottom = canvas.height - top - 100;
+            pipes.push({ x: canvas.width, top, bottom, width: 20 });
+        }
+        pipes.forEach(pipe => {
+            pipe.x -= 2;
+        });
+        if (pipes.length && pipes[0].x < -pipes[0].width) {
+            pipes.shift();
+        }
+    }
+
+    function checkCollision() {
+        for (const pipe of pipes) {
+            if (bird.x + bird.width > pipe.x && bird.x < pipe.x + pipe.width) {
+                if (bird.y < pipe.top || bird.y + bird.height > canvas.height - pipe.bottom) {
+                    alert("Collision! Game over.");
+                    resetGame();
+                }
+            }
+        }
+    }
+
+    function resetGame() {
+        bird.y = 150;
+        pipes.length = 0;
+        frame = 0;
+    }
+
+    function update() {
+        bird.velocity += bird.gravity;
+        bird.y += bird.velocity;
+
+        if (bird.y + bird.height >= canvas.height) {
+            alert("Vous êtes tombé! Game over.");
+            resetGame();
+        }
+
+        updatePipes();
+        checkCollision();
+    }
+
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawBird();
+        drawPipes();
+    }
+
+    function gameLoop() {
+        update();
+        draw();
+        frame++;
+        requestAnimationFrame(gameLoop);
+    }
+
+    document.addEventListener('click', () => {
+        bird.velocity += bird.lift;
+    });
+
+    gameLoop();
+</script>
